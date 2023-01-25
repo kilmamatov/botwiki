@@ -2,7 +2,7 @@ import telebot
 import wikipedia
 import re
 import os
-import webbrowser
+
 
 
 TOKEN = os.getenv('TELE_TOKEN')
