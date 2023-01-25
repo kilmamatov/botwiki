@@ -2,6 +2,8 @@ import telebot
 import wikipedia
 import re
 import os
+from telebot import types
+
 
 TOKEN = os.getenv('TELE_TOKEN')
 bot = telebot.TeleBot(TOKEN)
@@ -54,8 +56,10 @@ def start(m, res=False):
     # Получение сообщений от юзера
     @bot.message_handler(content_types=["text"])
     def handle_text(message):
-        bot.send_message(message.chat.id, getwiki(message.text))
-        bot.send_message(m.chat.id, 'Full в описние','https://ru.wikipedia.org/w/index.php?go=Перейти&search=' + message.text)
+        markup = types.InlineKeyboardMarkup()
+        btn_my_site = types.InlineKeyboardButton(text='Полная статья', url='https://ru.wikipedia.org/w/index.php?go=Перейти&search=' + message.text)
+        markup.add(btn_my_site)
+        bot.send_message(message.chat.id, getwiki(message.text), reply_markup=markup)
 
 
 bot.polling(none_stop=True, interval=0)
