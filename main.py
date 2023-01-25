@@ -12,10 +12,8 @@ def start_message(message):
     markup = telebot.types.ReplyKeyboardMarkup()
     start_btn = telebot.types.KeyboardButton("/start")
     wiki_btn = telebot.types.KeyboardButton("/wiki")
-    # lang1_btn = telebot.types.KeyboardButton("ru")
-    # lang2_btn = telebot.types.KeyboardButton("en")
     markup.add(start_btn, wiki_btn)
-    bot.send_message(message.chat.id, 'Привет! Это бот много чего умеет!(Выбери язык)', reply_markup=markup)
+    bot.send_message(message.chat.id, 'Привет! Это бот wikipedia', reply_markup=markup)
 
 
 wikipedia.set_lang('ru')
@@ -24,7 +22,7 @@ wikipedia.set_lang('ru')
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["wiki"])
 def start(m, res=False):
-    bot.send_message(m.chat.id, 'Отправьте мне любое слово, и я найду его значение на Wikipedia')
+    bot.send_message(m.chat.id, 'Отправьте мне любое слово, и я найду его значение')
 
     def getwiki(s):
         try:
@@ -46,8 +44,6 @@ def start(m, res=False):
                 else:
                     break
             # Теперь при помощи регулярных выражений убираем разметку
-            wikitext2 = re.sub('\([^()]*\)', '', wikitext2)
-            wikitext2 = re.sub('\([^()]*\)', '', wikitext2)
             wikitext2 = re.sub('\{[^\{\}]*\}', '', wikitext2)
             # Возвращаем текстовую строку
             return wikitext2
@@ -59,6 +55,7 @@ def start(m, res=False):
     @bot.message_handler(content_types=["text"])
     def handle_text(message):
         bot.send_message(message.chat.id, getwiki(message.text))
+        bot.send_message(m.chat.id, 'Full в описние','https://ru.wikipedia.org/w/index.php?go=Перейти&search=' + message.text)
 
 
 bot.polling(none_stop=True, interval=0)
