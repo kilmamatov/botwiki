@@ -4,7 +4,6 @@ import re
 import os
 
 
-
 TOKEN = os.getenv('TELE_TOKEN')
 bot = telebot.TeleBot(TOKEN)
 
@@ -16,11 +15,9 @@ def start_message(message):
     wiki_btn = telebot.types.KeyboardButton("/wiki")
     wikieng_btn = telebot.types.KeyboardButton("/wikieng")
     random_btn = telebot.types.KeyboardButton("/Random")
-    markup.add(start_btn, wiki_btn, random_btn,wikieng_btn)
+    meme_bth = telebot.types.KeyboardButton("/meme")
+    markup.add(start_btn, wiki_btn, random_btn, wikieng_btn, meme_bth)
     bot.send_message(message.chat.id, 'Привет! Это бот wikipedia', reply_markup=markup)
-
-
-wikipedia.set_lang('ru')
 
 
 @bot.message_handler(commands=["Random"])
@@ -31,6 +28,7 @@ def random(m):
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["wiki"])
 def start(m, res=False):
+    wikipedia.set_lang('ru')
     bot.send_message(m.chat.id, 'Отправьте мне любое слово, и я найду его значение')
 
     def getwiki(s):
@@ -72,7 +70,7 @@ def start(m, res=False):
 @bot.message_handler(commands=["wikieng"])
 def start(m, res=False):
     wikipedia.set_lang('en')
-    bot.send_message(m.chat.id, 'Отправьте мне любое слово, и я найду его значение на Английском языке')
+    bot.send_message(m.chat.id, 'Отправьте мне любое слово, и я найду его значение')
 
     def getwiki(s):
         try:
@@ -105,9 +103,17 @@ def start(m, res=False):
     @bot.message_handler(content_types=["text"])
     def handle_text(message):
         markup = telebot.types.InlineKeyboardMarkup()
-        btn_my_site = telebot.types.InlineKeyboardButton(text='Full', url='https://en.wikipedia.org/w/index.php?search=&title=Special:Search' + message.text)
+        btn_my_site = telebot.types.InlineKeyboardButton(text='Полная статья', url='https://ru.wikipedia.org/w/index.php?go=Перейти&search=' + message.text)
         markup.add(btn_my_site)
         bot.send_message(message.chat.id, getwiki(message.text), reply_markup=markup)
+
+
+@bot.message_handler(commands=["meme"])
+def start(m, res=False):
+    markup = telebot.types.InlineKeyboardMarkup()
+    btn_my_site = telebot.types.InlineKeyboardButton(text='видео', url='https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+    markup.add(btn_my_site)
+    bot.send_message(m.chat.id, 'Эта кнопка пока не работает, лучше посмотрите видео', reply_markup=markup)
 
 
 bot.polling(none_stop=True, interval=0)
